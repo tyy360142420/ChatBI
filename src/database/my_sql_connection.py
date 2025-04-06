@@ -1,17 +1,49 @@
 import mysql.connector
 
-mysql_conn = mysql.connector.connect(
-    host="127.0.0.1",
-    user="tyy",
-    password="TangYiYe@123",
-    database="spider"
-)
-
-cursor = mysql_conn.cursor()
-cursor.execute("select * from table1")
-result = cursor.fetchall()
-for row in result:
-    print(row)
 
 
-mysql_conn.close()
+class MySqlConnection:
+
+    db_type: str = "mysql"
+    db_dialect: str = "mysql"
+    def __init__(self,host,user,password,database):
+        self.host = host
+        self.database = database
+        self.mysql_conn = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database
+        )
+        self.cursor = self.mysql_conn.cursor()
+
+    def execute_sql(self,sql):
+        self.cursor.execute(sql)
+        rows = self.cursor.fetchall()
+        return rows
+
+    def get_table_simple_infos(self):
+        sql_for_get_tables = """
+                show tables
+            """
+        result_of_query_tables = self.execute_sql(sql_for_get_tables)
+        table_result = []
+        for row in result_of_query_tables:
+            table_name = row[0]
+            sql_for_get_table_column_info = f"""
+                SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                 TABLE_NAME='{table_name}'
+            """
+            result_of_query_columns = self.execute_sql(sql_for_get_table_column_info)
+            table_columns = []
+            for column in result_of_query_columns:
+                field_info = list(column)
+                table_columns.append(field_info[0])
+            table_result.append(f"{table_name}({','.join(table_columns)});")
+        print(table_result)
+        return table_result
+
+
+
+    def close_connection(self):
+        self.mysql_conn.close()
