@@ -7,11 +7,11 @@ from src.controller.question_controller import router
 from src.embedding.embedding_service import VectorService
 from src.prompt.static_prompt import database_analyst_prompt,display_type_prompt,response_prompt
 
-template = """Question:{question};Background Knowledge:{knowledge}"""
-prompt = ChatPromptTemplate.from_template(template)
-model = OllamaLLM(model="llama3.2:1b")
-chain = prompt|model
-dialect = "sqlite"
+# template = """Question:{question};Background Knowledge:{knowledge}"""
+# prompt = ChatPromptTemplate.from_template(template)
+# model = OllamaLLM(model="llama3.2:1b")
+# chain = prompt|model
+# dialect = "sqlite"
 
 
 top_k =1

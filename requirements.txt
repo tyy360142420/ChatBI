@@ -1,0 +1,7 @@
+langchain
+fastapi[standard]
+python-dotenv
+langchain_ollama
+mysql-connector-python
+langchain_chroma
+langchain_community
