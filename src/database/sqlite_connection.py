@@ -13,16 +13,19 @@ class SqliteConnector:
     def execute_sql(self,sql):
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
-        return rows
+        columns = [desc[0] for desc in self.cursor.description]
+        return columns,rows
 
     #最基础的信息：表(字段)
     def get_table_simple_info(self):
-        table_infos = self.execute_sql("SELECT name FROM sqlite_master WHERE type = 'table'")
+        columns,table_infos = self.execute_sql("SELECT name FROM sqlite_master WHERE type = 'table'")
         tables = [table_info[0] for table_info in table_infos]
         results = []
         for table in tables:
-            columns = self.execute_sql(f"PRAGMA table_info({table})")
+            print(table)
+            data_columns,columns = self.execute_sql(f"PRAGMA table_info({table})")
             table_columns = []
+            print(columns)
             for row_column in columns:
                 field_info = list(row_column)
                 table_columns.append(field_info[1])

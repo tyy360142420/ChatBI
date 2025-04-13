@@ -20,7 +20,8 @@ class MySqlConnection:
     def execute_sql(self,sql):
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
-        return rows
+        columns = [desc[0] for desc in self.cursor.description]
+        return columns,rows
 
     def get_table_simple_infos(self):
         sql_for_get_tables = """
@@ -40,7 +41,6 @@ class MySqlConnection:
                 field_info = list(column)
                 table_columns.append(field_info[0])
             table_result.append(f"{table_name}({','.join(table_columns)});")
-        print(table_result)
         return table_result
 
 
