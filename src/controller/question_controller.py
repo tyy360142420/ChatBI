@@ -17,6 +17,6 @@ async def ask_question(question:str):
     json_response = chain.invoke({"question":question,"knowledge":database_analyst_prompt.format(table_info=table_infos,user_input=question,response=response_prompt,dialect=sqliteConnector.db_dialect,top_k=1,display_type=display_type_prompt)})
     parser = BasicParser()
     json_answer_of_text_to_sql = json.loads(parser.parse_prompt_response(json_response))
-    data_coulmns,data_result = sqliteConnector.execute_sql(json_answer_of_text_to_sql["sql"])
+    data_coulmns,data_result = sqliteConnector.getJsonData(json_answer_of_text_to_sql["sql"])
     dataRender = DataRender(json_answer_of_text_to_sql["sql"],json_answer_of_text_to_sql["display_type"],data_result,data_coulmns)
     return dataRender

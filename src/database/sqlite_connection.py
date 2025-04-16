@@ -16,6 +16,12 @@ class SqliteConnector:
         columns = [desc[0] for desc in self.cursor.description]
         return columns,rows
 
+    def getJsonData(self,sql):
+        columns ,rows = self.execute_sql(sql)
+        results = []
+        for row in rows:
+            results.append(dict(zip(columns, row)))
+        return columns,results
     #最基础的信息：表(字段)
     def get_table_simple_info(self):
         columns,table_infos = self.execute_sql("SELECT name FROM sqlite_master WHERE type = 'table'")
