@@ -11,6 +11,7 @@ router = APIRouter(prefix="/chat",tags=["llmInteraction"])
 
 @router.post("/askQuestion")
 async def ask_question(question:Question):
+    print(question.question)
     sqliteConnector = SqliteConnector("src/sqlite/chinook.db")
     table_infos = sqliteConnector.get_table_simple_info()
     # mysql_connector = MySqlConnection("127.0.0.1","tyy","TangYiYe@123","airport")

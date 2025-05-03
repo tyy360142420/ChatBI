@@ -6,7 +6,7 @@ from langchain_ollama.llms import OllamaLLM
 from src.controller.question_controller import router
 from src.embedding.embedding_service import VectorService
 from src.prompt.static_prompt import database_analyst_prompt,display_type_prompt,response_prompt
-
+from fastapi.middleware.cors import CORSMiddleware
 # template = """Question:{question};Background Knowledge:{knowledge}"""
 # prompt = ChatPromptTemplate.from_template(template)
 # model = OllamaLLM(model="llama3.2:1b")
@@ -137,4 +137,11 @@ table name:
         Email:Nvarchar(60)
 """
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 生产环境应更严格
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(router)
