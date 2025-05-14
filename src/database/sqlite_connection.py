@@ -28,10 +28,8 @@ class SqliteConnector:
         tables = [table_info[0] for table_info in table_infos]
         results = []
         for table in tables:
-            print(table)
             data_columns,columns = self.execute_sql(f"PRAGMA table_info({table})")
             table_columns = []
-            print(columns)
             for row_column in columns:
                 field_info = list(row_column)
                 table_columns.append(field_info[1])

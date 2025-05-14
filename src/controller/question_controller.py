@@ -11,14 +11,14 @@ router = APIRouter(prefix="/chat",tags=["llmInteraction"])
 
 @router.post("/askQuestion")
 async def ask_question(question:Question):
-    print(question.question)
     sqliteConnector = SqliteConnector("src/sqlite/chinook.db")
     table_infos = sqliteConnector.get_table_simple_info()
     # mysql_connector = MySqlConnection("127.0.0.1","tyy","TangYiYe@123","airport")
     # table_infos = mysql_connector.get_table_simple_infos()
     json_response = chain.invoke({"question":question.question,"knowledge":database_analyst_prompt.format(table_info=table_infos,user_input=question,response=response_prompt,dialect=sqliteConnector.db_dialect,top_k=1,display_type=display_type_prompt)})
+    print(json_response)
     parser = BasicParser()
-    json_answer_of_text_to_sql = json.loads(parser.parse_prompt_response(json_response))
+    json_answer_of_text_to_sql = json.loads(parser.parse_prompt_response(json_response.content))
     data_coulmns,data_result = sqliteConnector.getJsonData(json_answer_of_text_to_sql["sql"])
     dataRender = DataRender(json_answer_of_text_to_sql["sql"],json_answer_of_text_to_sql["display_type"],data_result,data_coulmns)
     return dataRender

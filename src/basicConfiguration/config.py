@@ -9,6 +9,6 @@ class Config(metaclass=Singleton):
         """initialize the Config class"""
         #default name is not
         self.LLM_NAME_FOR_SQL = os.getenv("LLM_MODEL","")
-        self.EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL","")
+        self.LLM_MODEL_API_URL = os.getenv("LLM_MODEL_API_URL","")
         #the porpotion
         self.TMPERATURE = float(os.getenv("TEMPERATURE",0.7))
